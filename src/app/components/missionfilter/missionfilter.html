@@ -1,0 +1,11 @@
+<section class="missionfilter">
+  <mat-form-field appearance="outline" class="missionfilter__field">
+    <mat-label>Filter by launch year</mat-label>
+    <mat-select [value]="selectValue()" (selectionChange)="onYearChange($event)">
+      <mat-option value="">All years</mat-option>
+      @for (y of yearChoices; track y) {
+        <mat-option [value]="y">{{ y }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+</section>

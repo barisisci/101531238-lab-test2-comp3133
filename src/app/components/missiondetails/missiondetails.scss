@@ -1,0 +1,61 @@
+.details__nav {
+  margin-bottom: 1rem;
+}
+
+.details__patch {
+  object-fit: contain;
+  background: #fff;
+}
+
+.details__status,
+.details__error {
+  padding: 0.75rem 1rem;
+}
+
+.details__error {
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--mat-sys-error) 12%, var(--mat-sys-surface));
+}
+
+.details__h2 {
+  margin: 0 0 0.35rem;
+  font: var(--mat-sys-title-medium);
+}
+
+.details__block {
+  margin-bottom: 1.25rem;
+}
+
+.details__text {
+  margin: 0;
+  line-height: 1.55;
+  font-size: 0.95rem;
+}
+
+.details__banner {
+  margin: 0;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  background: var(--mat-sys-surface-container);
+}
+
+.details__banner--ok {
+  background: color-mix(in srgb, #2e7d32 14%, var(--mat-sys-surface));
+}
+
+.details__banner--bad {
+  background: color-mix(in srgb, var(--mat-sys-error) 14%, var(--mat-sys-surface));
+}
+
+.details__banner--upcoming {
+  background: color-mix(in srgb, var(--mat-sys-primary) 14%, var(--mat-sys-surface));
+}
+
+.details__links {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.details__links a {
+  color: var(--mat-sys-primary);
+}

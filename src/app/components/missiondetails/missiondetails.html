@@ -1,0 +1,97 @@
+<article class="details">
+  <nav class="details__nav">
+    <a mat-button routerLink="/">
+      <mat-icon>arrow_back</mat-icon>
+      Back to list
+    </a>
+  </nav>
+
+  @if (loading()) {
+    <p class="details__status">Loading…</p>
+  } @else if (error(); as err) {
+    <p class="details__error" role="alert">{{ err }}</p>
+  } @else if (launch(); as l) {
+    <mat-card appearance="outlined">
+      <mat-card-header>
+        @if (l.links.mission_patch_small; as patch) {
+          <img mat-card-avatar class="details__patch" [src]="patch" [alt]="l.mission_name" />
+        }
+        <mat-card-title>{{ l.mission_name }}</mat-card-title>
+        <mat-card-subtitle>
+          Flight #{{ l.flight_number }} · Launch year {{ l.launch_year }} ·
+          {{ l.launch_date_utc | launchDate }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <section class="details__block" aria-label="Outcome">
+          @switch (outcome()) {
+            @case ('upcoming') {
+              <p class="details__banner details__banner--upcoming"><strong>Upcoming</strong> — not launched yet.</p>
+            }
+            @case ('success') {
+              <p class="details__banner details__banner--ok"><strong>Success</strong></p>
+            }
+            @case ('failure') {
+              <p class="details__banner details__banner--bad"><strong>Failure</strong></p>
+            }
+            @default {
+              <p class="details__banner"><strong>Outcome unknown</strong></p>
+            }
+          }
+        </section>
+
+        <section class="details__block">
+          <h2 class="details__h2">Details</h2>
+          <p class="details__text">{{ l.details || '—' }}</p>
+        </section>
+
+        <section class="details__block">
+          <h2 class="details__h2">Rocket</h2>
+          <p class="details__text">
+            <strong>{{ l.rocket.rocket_name }}</strong>
+            ({{ l.rocket.rocket_type }})
+          </p>
+        </section>
+
+        <section class="details__block">
+          <h2 class="details__h2">Links</h2>
+          <ul class="details__links">
+            <li>
+              Mission patch (small):
+              @if (l.links.mission_patch_small) {
+                <a [href]="l.links.mission_patch_small" target="_blank" rel="noopener">open image</a>
+              } @else {
+                —
+              }
+            </li>
+            <li>
+              Article:
+              @if (l.links.article_link) {
+                <a [href]="l.links.article_link" target="_blank" rel="noopener">article</a>
+              } @else {
+                —
+              }
+            </li>
+            <li>
+              Wikipedia:
+              @if (l.links.wikipedia) {
+                <a [href]="l.links.wikipedia" target="_blank" rel="noopener">wikipedia</a>
+              } @else {
+                —
+              }
+            </li>
+            <li>
+              Video:
+              @if (l.links.video_link) {
+                <a [href]="l.links.video_link" target="_blank" rel="noopener">video</a>
+              } @else {
+                —
+              }
+            </li>
+          </ul>
+        </section>
+      </mat-card-content>
+    </mat-card>
+  }
+</article>

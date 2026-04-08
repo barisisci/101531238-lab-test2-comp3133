@@ -1,0 +1,115 @@
+<section class="missionlist">
+  <h1 class="missionlist__title">SpaceX launches</h1>
+
+  <app-missionfilter />
+
+  <div class="missionlist__toolbar">
+    <mat-form-field appearance="outline" class="missionlist__search">
+      <mat-label>Search mission name</mat-label>
+      <input matInput type="search" [formControl]="searchControl" autocomplete="off" />
+    </mat-form-field>
+    <mat-checkbox class="missionlist__check" [(ngModel)]="highlightFailures">
+      Highlight failed missions
+    </mat-checkbox>
+  </div>
+
+  @if (spx.loading()) {
+    <div class="missionlist__loading">
+      <mat-progress-spinner mode="indeterminate" diameter="40" />
+      <span>Loading launches…</span>
+    </div>
+  } @else if (spx.error(); as err) {
+    <p class="missionlist__error" role="alert">{{ err }}</p>
+  } @else {
+    @if (visibleLaunches().length === 0) {
+      <p class="missionlist__empty">Nothing matches that search or year.</p>
+    } @else {
+      <div class="missionlist__grid">
+        @for (launch of visibleLaunches(); track launch.flight_number) {
+          <mat-card
+            class="mission-card"
+            [class.mission-card--fail]="highlightFailures && outcome(launch) === 'failure'"
+            appearance="outlined"
+          >
+            <mat-card-header>
+              @if (launch.links.mission_patch_small; as patch) {
+                <img
+                  mat-card-avatar
+                  class="mission-card__patch"
+                  [src]="patch"
+                  [alt]="'Patch: ' + launch.mission_name"
+                />
+              } @else {
+                <div class="mission-card__patch mission-card__patch--empty" mat-card-avatar></div>
+              }
+              <mat-card-title>{{ launch.mission_name }}</mat-card-title>
+              <mat-card-subtitle>
+                Flight {{ launch.flight_number }} · Year {{ launch.launch_year }} ·
+                {{ launch.launch_date_utc | launchDate }}
+              </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+              <p class="mission-card__outcome">
+                Outcome: <strong>{{ outcome(launch) | missionOutcomeLabel }}</strong>
+              </p>
+              <p class="mission-card__details">
+                <strong>Details:</strong>
+                {{ launch.details || '—' }}
+              </p>
+              <div class="mission-card__rocket">
+                <strong>Rocket</strong>
+                <span>{{ launch.rocket.rocket_name }}</span>
+                <span class="mission-card__muted">({{ launch.rocket.rocket_type }})</span>
+              </div>
+              <div class="mission-card__links">
+                <strong>Links</strong>
+                <ul class="mission-card__linklist">
+                  <li>
+                    Patch (small):
+                    @if (launch.links.mission_patch_small) {
+                      <a [href]="launch.links.mission_patch_small" target="_blank" rel="noopener">open</a>
+                    } @else {
+                      —
+                    }
+                  </li>
+                  <li>
+                    Article:
+                    @if (launch.links.article_link) {
+                      <a [href]="launch.links.article_link" target="_blank" rel="noopener">article</a>
+                    } @else {
+                      —
+                    }
+                  </li>
+                  <li>
+                    Wikipedia:
+                    @if (launch.links.wikipedia) {
+                      <a [href]="launch.links.wikipedia" target="_blank" rel="noopener">wikipedia</a>
+                    } @else {
+                      —
+                    }
+                  </li>
+                  <li>
+                    Video:
+                    @if (launch.links.video_link) {
+                      <a [href]="launch.links.video_link" target="_blank" rel="noopener">video</a>
+                    } @else {
+                      —
+                    }
+                  </li>
+                </ul>
+              </div>
+            </mat-card-content>
+
+            <mat-card-actions align="end">
+              <a mat-button color="primary" [routerLink]="['/mission', launch.flight_number]">
+                <mat-icon>chevron_right</mat-icon>
+                Mission details
+              </a>
+            </mat-card-actions>
+          </mat-card>
+        }
+      </div>
+    }
+  }
+</section>
